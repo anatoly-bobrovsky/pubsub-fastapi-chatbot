@@ -1,0 +1,29 @@
+services:
+  chatbot:
+    build:
+      context: .
+      dockerfile: ci/Dockerfile
+    image: $REPOSITORY:$TAG
+    networks:
+      - chat
+    ports:
+      - "8000:8000"
+
+  redis:
+    image: redis:7.4
+    networks:
+      - chat
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server"]
+
+
+networks:
+  chat:
+    driver: bridge
+
+volumes:
+  redis-data:
+    external: true
